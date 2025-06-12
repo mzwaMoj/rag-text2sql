@@ -1,0 +1,477 @@
+{
+  "database_info": {
+    "database_type": "SQL Server",
+    "database_name": "master",
+    "server": "localhost\\SQLEXPRESS",
+    "schema": "dbo",
+    "last_updated": "2025-06-09"
+  },
+  "table_info": {
+    "table_name": "transaction_history",
+    "full_table_name": "[dbo].[transaction_history]",
+    "description": "Comprehensive transaction history table containing all customer financial transactions including deposits, withdrawals, transfers, payments, and purchases",
+    "total_records": "5000+",
+    "primary_key": "transaction_id",
+    "foreign_keys": [
+      "customer_id"
+    ],
+    "creation_date": "2025-06-09",
+    "time_range": "Last 2 years of transaction data"
+  },
+  "columns": [
+    {
+      "column_name": "transaction_id",
+      "data_type": "bigint",
+      "sql_type": "[bigint] NOT NULL",
+      "is_nullable": false,
+      "is_primary_key": true,
+      "description": "Unique transaction identifier, 12-digit number",
+      "example_values": [
+        679551814302,
+        376513881618,
+        994709101726
+      ],
+      "value_range": "100000000000 to 999999999999",
+      "business_rules": "Auto-generated unique identifier for each transaction"
+    },
+    {
+      "column_name": "customer_id",
+      "data_type": "int",
+      "sql_type": "[int] NOT NULL",
+      "is_nullable": false,
+      "is_foreign_key": true,
+      "references": "customer_information.id",
+      "description": "Customer identifier linking to customer_information table",
+      "example_values": [
+        10000001,
+        10000002,
+        10000003
+      ],
+      "value_range": "10000000 to 99999999",
+      "business_rules": "Must exist in customer_information table"
+    },
+    {
+      "column_name": "transaction_date",
+      "data_type": "datetime",
+      "sql_type": "[datetime] NOT NULL",
+      "is_nullable": false,
+      "description": "Date and time when the transaction occurred",
+      "example_values": [
+        "2023-06-15 14:30:22",
+        "2024-11-28 09:15:45",
+        "2025-01-12 16:45:33"
+      ],
+      "date_range": "2023-06-09 to present",
+      "business_rules": "Cannot be future date, used for transaction ordering and reporting"
+    },
+    {
+      "column_name": "transaction_type",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](50) NOT NULL",
+      "max_length": 50,
+      "is_nullable": false,
+      "description": "Type of transaction performed",
+      "example_values": [
+        "Deposit",
+        "Withdrawal",
+        "Transfer",
+        "Payment",
+        "Purchase"
+      ],
+      "valid_values": [
+        "Deposit",
+        "Withdrawal",
+        "Transfer",
+        "Payment",
+        "Purchase",
+        "Refund",
+        "Fee",
+        "Interest",
+        "Loan Payment",
+        "Salary"
+      ],
+      "business_rules": "Determines transaction processing rules and account impact"
+    },
+    {
+      "column_name": "amount",
+      "data_type": "decimal",
+      "sql_type": "[decimal](18, 2) NOT NULL",
+      "precision": 18,
+      "scale": 2,
+      "is_nullable": false,
+      "description": "Transaction amount in specified currency (negative for debits, positive for credits)",
+      "example_values": [
+        1500.5,
+        -89.99,
+        25000.0,
+        -1250.75
+      ],
+      "value_range": "-100000.00 to 100000.00",
+      "business_rules": "Negative values represent debits (withdrawals, payments, fees), positive values represent credits (deposits, refunds, interest)"
+    },
+    {
+      "column_name": "currency",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](3) NOT NULL",
+      "max_length": 3,
+      "is_nullable": false,
+      "description": "ISO 4217 currency code for the transaction",
+      "example_values": [
+        "ZAR",
+        "USD",
+        "EUR",
+        "GBP"
+      ],
+      "valid_values": [
+        "ZAR",
+        "USD",
+        "EUR",
+        "GBP",
+        "JPY"
+      ],
+      "business_rules": "Primarily ZAR (85%), with some international currencies for forex transactions"
+    },
+    {
+      "column_name": "description",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](500) NULL",
+      "max_length": 500,
+      "is_nullable": true,
+      "description": "Human-readable description of the transaction",
+      "example_values": [
+        "Groceries purchase at Woolworths",
+        "Transfer to John Smith",
+        "Salary payment from ABC Corp"
+      ],
+      "business_rules": "Auto-generated based on transaction type and context"
+    },
+    {
+      "column_name": "category",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](100) NULL",
+      "max_length": 100,
+      "is_nullable": true,
+      "description": "Transaction category for spending analysis",
+      "example_values": [
+        "Groceries",
+        "Gas",
+        "Restaurant",
+        "Shopping",
+        "Utilities"
+      ],
+      "valid_values": [
+        "Groceries",
+        "Gas",
+        "Restaurant",
+        "Shopping",
+        "Utilities",
+        "Healthcare",
+        "Entertainment",
+        "Travel",
+        "Education",
+        "Insurance",
+        "Banking",
+        "Investment",
+        "Salary",
+        "Bonus",
+        "Refund",
+        "Other"
+      ],
+      "business_rules": "Used for budgeting and spending pattern analysis"
+    },
+    {
+      "column_name": "channel",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](50) NULL",
+      "max_length": 50,
+      "is_nullable": true,
+      "description": "Channel through which the transaction was made",
+      "example_values": [
+        "ATM",
+        "Online Banking",
+        "Mobile App",
+        "Branch"
+      ],
+      "valid_values": [
+        "ATM",
+        "Online Banking",
+        "Mobile App",
+        "Branch",
+        "POS Terminal",
+        "Wire Transfer",
+        "ACH",
+        "Check",
+        "Direct Deposit"
+      ],
+      "business_rules": "Tracks customer behavior and channel preference"
+    },
+    {
+      "column_name": "status",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](20) NOT NULL",
+      "max_length": 20,
+      "is_nullable": false,
+      "description": "Current status of the transaction",
+      "example_values": [
+        "Completed",
+        "Pending",
+        "Failed",
+        "Cancelled"
+      ],
+      "valid_values": [
+        "Completed",
+        "Pending",
+        "Failed",
+        "Cancelled"
+      ],
+      "business_rules": "Only Completed transactions affect account balance"
+    },
+    {
+      "column_name": "reference_number",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](50) NULL",
+      "max_length": 50,
+      "is_nullable": true,
+      "description": "Unique reference number for transaction tracking",
+      "example_values": [
+        "REF1234AB5678",
+        "REF9876XY1234"
+      ],
+      "pattern": "REF####??####",
+      "business_rules": "Used for transaction inquiries and dispute resolution"
+    },
+    {
+      "column_name": "merchant_name",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](255) NULL",
+      "max_length": 255,
+      "is_nullable": true,
+      "description": "Name of merchant for purchase and payment transactions",
+      "example_values": [
+        "Woolworths",
+        "Shell Garage",
+        "Amazon",
+        "Pick n Pay"
+      ],
+      "business_rules": "Only populated for Purchase and Payment transaction types"
+    },
+    {
+      "column_name": "merchant_category",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](100) NULL",
+      "max_length": 100,
+      "is_nullable": true,
+      "description": "Category of merchant for purchase and payment transactions",
+      "example_values": [
+        "Groceries",
+        "Gas",
+        "Shopping",
+        "Utilities"
+      ],
+      "business_rules": "Matches category field for Purchase and Payment transactions"
+    },
+    {
+      "column_name": "account_from",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](20) NULL",
+      "max_length": 20,
+      "is_nullable": true,
+      "description": "Source account number for the transaction",
+      "example_values": [
+        "1234567890",
+        "9876543210"
+      ],
+      "business_rules": "10-digit account number, links to customer's account"
+    },
+    {
+      "column_name": "account_to",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](20) NULL",
+      "max_length": 20,
+      "is_nullable": true,
+      "description": "Destination account number for transfer transactions",
+      "example_values": [
+        "5555666677",
+        "1111222233"
+      ],
+      "business_rules": "Only populated for Transfer transaction types"
+    },
+    {
+      "column_name": "balance_after",
+      "data_type": "decimal",
+      "sql_type": "[decimal](18, 2) NULL",
+      "precision": 18,
+      "scale": 2,
+      "is_nullable": true,
+      "description": "Account balance after the transaction was processed",
+      "example_values": [
+        15420.5,
+        8750.25,
+        45000.0
+      ],
+      "value_range": "0.00 to 100000.00",
+      "business_rules": "Snapshot of balance immediately after transaction completion"
+    },
+    {
+      "column_name": "location",
+      "data_type": "nvarchar",
+      "sql_type": "[nvarchar](255) NULL",
+      "max_length": 255,
+      "is_nullable": true,
+      "description": "Geographic location where the transaction occurred",
+      "example_values": [
+        "Johannesburg, South Africa",
+        "Cape Town, South Africa",
+        "London, United Kingdom"
+      ],
+      "business_rules": "Used for fraud detection and geographic spending analysis"
+    },
+    {
+      "column_name": "created_at",
+      "data_type": "datetime",
+      "sql_type": "[datetime] NOT NULL",
+      "is_nullable": false,
+      "description": "Timestamp when the transaction record was created in the system",
+      "example_values": [
+        "2025-06-09 10:30:22",
+        "2025-06-09 11:15:45"
+      ],
+      "business_rules": "System audit field, automatically populated"
+    },
+    {
+      "column_name": "updated_at",
+      "data_type": "datetime",
+      "sql_type": "[datetime] NOT NULL",
+      "is_nullable": false,
+      "description": "Timestamp when the transaction record was last updated",
+      "example_values": [
+        "2025-06-09 10:30:22",
+        "2025-06-09 11:15:45"
+      ],
+      "business_rules": "System audit field, automatically updated on changes"
+    }
+  ],
+  "relationships": {
+    "foreign_keys": [
+      {
+        "column": "customer_id",
+        "references_table": "customer_information",
+        "references_column": "id",
+        "relationship_type": "many_to_one",
+        "description": "Each transaction belongs to one customer, customers can have many transactions"
+      }
+    ],
+    "internal_relationships": [
+      {
+        "type": "conditional_field",
+        "source": "transaction_type",
+        "target": "merchant_name",
+        "rule": "merchant_name is only populated when transaction_type is 'Purchase' or 'Payment'"
+      },
+      {
+        "type": "conditional_field",
+        "source": "transaction_type",
+        "target": "account_to",
+        "rule": "account_to is only populated when transaction_type is 'Transfer'"
+      },
+      {
+        "type": "sign_convention",
+        "field": "amount",
+        "rule": "Negative amounts for debits (Withdrawal, Payment, Purchase, Fee, Loan Payment), positive for credits (Deposit, Salary, Interest, Refund)"
+      },
+      {
+        "type": "status_constraint",
+        "field": "balance_after",
+        "rule": "balance_after only reflects completed transactions, not pending/failed ones"
+      }
+    ]
+  },
+  "indexes": [
+    {
+      "name": "PK_transaction_history",
+      "type": "PRIMARY KEY",
+      "columns": [
+        "transaction_id"
+      ],
+      "description": "Primary key constraint"
+    },
+    {
+      "name": "IX_transaction_history_customer_id",
+      "type": "INDEX",
+      "columns": [
+        "customer_id"
+      ],
+      "description": "Index for customer-based queries"
+    },
+    {
+      "name": "IX_transaction_history_date",
+      "type": "INDEX",
+      "columns": [
+        "transaction_date"
+      ],
+      "description": "Index for date range queries"
+    },
+    {
+      "name": "IX_transaction_history_type_status",
+      "type": "INDEX",
+      "columns": [
+        "transaction_type",
+        "status"
+      ],
+      "description": "Composite index for transaction type and status queries"
+    }
+  ],
+  "common_queries": {
+    "customer_transactions": [
+      "SELECT * FROM [dbo].[transaction_history] WHERE customer_id = ? ORDER BY transaction_date DESC",
+      "SELECT transaction_type, SUM(amount) as total FROM [dbo].[transaction_history] WHERE customer_id = ? AND status = 'Completed' GROUP BY transaction_type"
+    ],
+    "date_range_queries": [
+      "SELECT * FROM [dbo].[transaction_history] WHERE transaction_date BETWEEN ? AND ? ORDER BY transaction_date DESC",
+      "SELECT customer_id, COUNT(*) as transaction_count, SUM(amount) as total_amount FROM [dbo].[transaction_history] WHERE transaction_date >= DATEADD(month, -1, GETDATE()) GROUP BY customer_id"
+    ],
+    "transaction_analysis": [
+      "SELECT transaction_type, category, AVG(amount) as avg_amount, COUNT(*) as count FROM [dbo].[transaction_history] WHERE status = 'Completed' GROUP BY transaction_type, category",
+      "SELECT channel, COUNT(*) as usage_count FROM [dbo].[transaction_history] WHERE status = 'Completed' GROUP BY channel ORDER BY usage_count DESC"
+    ],
+    "spending_patterns": [
+      "SELECT category, SUM(ABS(amount)) as total_spent FROM [dbo].[transaction_history] WHERE amount < 0 AND status = 'Completed' GROUP BY category ORDER BY total_spent DESC",
+      "SELECT DATEPART(month, transaction_date) as month, SUM(amount) as net_flow FROM [dbo].[transaction_history] WHERE status = 'Completed' GROUP BY DATEPART(month, transaction_date)"
+    ],
+    "merchant_analysis": [
+      "SELECT merchant_name, COUNT(*) as transaction_count, SUM(ABS(amount)) as total_spent FROM [dbo].[transaction_history] WHERE merchant_name IS NOT NULL AND status = 'Completed' GROUP BY merchant_name ORDER BY total_spent DESC",
+      "SELECT merchant_category, AVG(ABS(amount)) as avg_transaction FROM [dbo].[transaction_history] WHERE merchant_category IS NOT NULL AND status = 'Completed' GROUP BY merchant_category"
+    ],
+    "balance_tracking": [
+      "SELECT transaction_date, balance_after FROM [dbo].[transaction_history] WHERE customer_id = ? ORDER BY transaction_date DESC",
+      "SELECT customer_id, MAX(balance_after) as peak_balance, MIN(balance_after) as lowest_balance FROM [dbo].[transaction_history] WHERE balance_after IS NOT NULL GROUP BY customer_id"
+    ]
+  },
+  "query_tips": {
+    "performance_tips": [
+      "Always use indexes on customer_id and transaction_date for better performance",
+      "Filter by status = 'Completed' when calculating balances or totals",
+      "Use date range filters to limit large result sets",
+      "Consider using EXISTS instead of IN when joining with customer table"
+    ],
+    "data_interpretation": [
+      "Negative amounts represent money leaving the account (debits)",
+      "Positive amounts represent money entering the account (credits)",
+      "Only 'Completed' transactions should be used for balance calculations",
+      "merchant_name and merchant_category are only populated for Purchase/Payment types",
+      "account_to is only populated for Transfer transactions"
+    ],
+    "common_patterns": [
+      "Use SUM(amount) for net flow analysis (positive = net inflow, negative = net outflow)",
+      "Use SUM(ABS(amount)) WHERE amount < 0 for total spending analysis",
+      "Use SUM(amount) WHERE amount > 0 for total deposits/income analysis",
+      "Group by DATEPART functions for time-based analysis (day, month, year)"
+    ],
+    "aggregation_tips": [
+      "Use COUNT(*) for transaction frequency analysis",
+      "Use AVG(ABS(amount)) for average transaction size by category",
+      "Use MAX(transaction_date) to find most recent transaction per customer",
+      "Use ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY transaction_date DESC) for latest N transactions per customer"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "query": "SELECT TOP 10 \n    full_name, \n    account_number, \n    balance\nFROM [dbo].[customer_information] WITH (NOLOCK)\nORDER BY balance DESC;",
+    "status": "success",
+    "row_count": 10,
+    "column_count": 3,
+    "columns": [
+      "full_name",
+      "account_number",
+      "balance"
+    ],
+    "result": "[{\"full_name\":\"Charles Cline\",\"account_number\":\"5423480814\",\"balance\":49859.96},{\"full_name\":\"Anthony Kelly\",\"account_number\":\"4563140853\",\"balance\":49832.11},{\"full_name\":\"Ruth Jackson\",\"account_number\":\"5615994343\",\"balance\":49754.38},{\"full_name\":\"Joseph Rush\",\"account_number\":\"5867848730\",\"balance\":49650.18},{\"full_name\":\"Christine Saunders\",\"account_number\":\"1790890359\",\"balance\":49550.14},{\"full_name\":\"Lisa Miller\",\"account_number\":\"2176919347\",\"balance\":49539.31},{\"full_name\":\"Colleen Watkins\",\"account_number\":\"1961220424\",\"balance\":49481.49},{\"full_name\":\"Cassie Velazquez\",\"account_number\":\"3850926169\",\"balance\":49431.26},{\"full_name\":\"Michael Daniels\",\"account_number\":\"1947559096\",\"balance\":49335.08},{\"full_name\":\"Jessica Nguyen\",\"account_number\":\"6707291039\",\"balance\":49277.91}]"
+  }
+]

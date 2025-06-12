@@ -1,0 +1,1 @@
+The client with the highest account balance is Charles Cline, whose account number is 5423480814. His current account balance is $49,859.96.

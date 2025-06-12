@@ -1,0 +1,14 @@
+[
+  {
+    "query": "SELECT \n    YEAR(loan_application_date) AS year,\n    loan_purpose AS transaction_type,\n    SUM(loan_amount_applied_for) AS total_transaction_amount\nFROM [dbo].[customer_information] WITH (NOLOCK)\nWHERE loan_status IS NOT NULL AND loan_amount_applied_for IS NOT NULL\nGROUP BY YEAR(loan_application_date), loan_purpose\nORDER BY year, transaction_type;",
+    "status": "success",
+    "row_count": 15,
+    "column_count": 3,
+    "columns": [
+      "year",
+      "transaction_type",
+      "total_transaction_amount"
+    ],
+    "result": "[{\"year\":2023,\"transaction_type\":\"Business\",\"total_transaction_amount\":422550.31},{\"year\":2023,\"transaction_type\":\"Education\",\"total_transaction_amount\":450878.28},{\"year\":2023,\"transaction_type\":\"Home\",\"total_transaction_amount\":456055.86},{\"year\":2023,\"transaction_type\":\"Personal\",\"total_transaction_amount\":310792.4},{\"year\":2023,\"transaction_type\":\"Vehicle\",\"total_transaction_amount\":355265.82},{\"year\":2024,\"transaction_type\":\"Business\",\"total_transaction_amount\":502712.8},{\"year\":2024,\"transaction_type\":\"Education\",\"total_transaction_amount\":381150.79},{\"year\":2024,\"transaction_type\":\"Home\",\"total_transaction_amount\":734877.41},{\"year\":2024,\"transaction_type\":\"Personal\",\"total_transaction_amount\":426987.21},{\"year\":2024,\"transaction_type\":\"Vehicle\",\"total_transaction_amount\":543699.61},{\"year\":2025,\"transaction_type\":\"Business\",\"total_transaction_amount\":159614.65},{\"year\":2025,\"transaction_type\":\"Education\",\"total_transaction_amount\":385849.07},{\"year\":2025,\"transaction_type\":\"Home\",\"total_transaction_amount\":213766.56},{\"year\":2025,\"transaction_type\":\"Personal\",\"total_transaction_amount\":301469.51},{\"year\":2025,\"transaction_type\":\"Vehicle\",\"total_transaction_amount\":259852.36}]"
+  }
+]

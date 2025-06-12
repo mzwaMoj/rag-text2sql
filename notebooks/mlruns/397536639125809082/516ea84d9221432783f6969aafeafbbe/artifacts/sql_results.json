@@ -1,0 +1,14 @@
+[
+  {
+    "query": "SELECT TOP 5 full_name, account_number, balance\nFROM [dbo].[customer_information] WITH (NOLOCK)\nORDER BY balance ASC;",
+    "status": "success",
+    "row_count": 5,
+    "column_count": 3,
+    "columns": [
+      "full_name",
+      "account_number",
+      "balance"
+    ],
+    "result": "[{\"full_name\":\"Christy Adams\",\"account_number\":\"2310140863\",\"balance\":158.62},{\"full_name\":\"Tiffany Luna\",\"account_number\":\"6282508959\",\"balance\":175.85},{\"full_name\":\"Mr. John Romero MD\",\"account_number\":\"330207984\",\"balance\":237.72},{\"full_name\":\"Charles Jackson\",\"account_number\":\"3389597397\",\"balance\":384.45},{\"full_name\":\"Steven Kirk\",\"account_number\":\"32574501\",\"balance\":487.28}]"
+  }
+]

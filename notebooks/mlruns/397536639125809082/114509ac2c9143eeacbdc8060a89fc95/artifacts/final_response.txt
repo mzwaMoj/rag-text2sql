@@ -1,0 +1,24 @@
+Here’s a clear breakdown of total transaction amounts by type and year:
+
+For 2023:
+- Business: $422,550.31
+- Education: $450,878.28
+- Home: $456,055.86
+- Personal: $310,792.40
+- Vehicle: $355,265.82
+
+For 2024:
+- Business: $502,712.80
+- Education: $381,150.79
+- Home: $734,877.41
+- Personal: $426,987.21
+- Vehicle: $543,699.61
+
+For 2025:
+- Business: $159,614.65
+- Education: $385,849.07
+- Home: $213,766.56
+- Personal: $301,469.51
+- Vehicle: $259,852.36
+
+In summary, Home and Vehicle transactions saw the largest increases in 2024, while Business transactions are projected to decrease in 2025. If you’d like details or trends for a specific type or year, just let me know!

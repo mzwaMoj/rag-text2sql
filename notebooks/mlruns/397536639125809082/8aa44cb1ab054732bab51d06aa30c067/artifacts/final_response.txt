@@ -1,0 +1,9 @@
+Here’s a clear and friendly summary of the bottom 5 clients by account balance:
+
+1. Christy Adams – $158.62 (Account: 2310140863)
+2. Tiffany Luna – $175.85 (Account: 6282508959)
+3. Mr. John Romero MD – $237.72 (Account: 330207984)
+4. Charles Jackson – $384.45 (Account: 3389597397)
+5. Steven Kirk – $487.28 (Account: 32574501)
+
+These clients currently have the lowest balances in your database. If you need more details or further insights, just let me know!

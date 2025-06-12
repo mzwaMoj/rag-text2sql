@@ -1,0 +1,15 @@
+[
+  {
+    "query": "SELECT TOP 1 full_name, id, account_number, balance\nFROM [dbo].[customer_information] WITH (NOLOCK)\nORDER BY balance DESC;",
+    "status": "success",
+    "row_count": 1,
+    "column_count": 4,
+    "columns": [
+      "full_name",
+      "id",
+      "account_number",
+      "balance"
+    ],
+    "result": "[{\"full_name\":\"Charles Cline\",\"id\":88090895,\"account_number\":\"5423480814\",\"balance\":49859.96}]"
+  }
+]

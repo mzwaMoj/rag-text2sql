@@ -1,0 +1,20 @@
+pandas
+numpy
+streamlit
+openai
+python-dotenv
+requests
+uuid
+faker
+fastapi
+uvicorn
+mlflow
+pymssql
+pyodbc
+
+# azure-identity 
+# azure-keyvault-secrets 
+# azure-storage-blob
+# azure-search-documents
+# pip install azure-ai-projects azure-identity
+# ! pip install azure-monitor-opentelemetry opentelemetry-sdk

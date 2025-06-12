@@ -1,0 +1,1 @@
+It looks like the database query couldn't be processed because it triggered a security check—likely due to an unusual or suspicious SQL pattern in the request. No results were returned. If you’d like, you can rephrase your question or ask for the data in a different way, and I’ll be happy to help!

@@ -1,0 +1,9 @@
+Here are the top five clients with the highest account balances:
+
+1. Charles Cline – Account Number: 5423480814 – Balance: $49,859.96
+2. Anthony Kelly – Account Number: 4563140853 – Balance: $49,832.11
+3. Ruth Jackson – Account Number: 5615994343 – Balance: $49,754.38
+4. Joseph Rush – Account Number: 5867848730 – Balance: $49,650.18
+5. Christine Saunders – Account Number: 1790890359 – Balance: $49,550.14
+
+These clients lead the list in terms of account balances.
