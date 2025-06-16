@@ -4,6 +4,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# folders
+mlruns/
+mlruns-*
+mlruns.*
+/mlruns
+
 # Environment variables
 .env
 .env.*

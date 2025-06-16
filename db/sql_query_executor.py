@@ -21,79 +21,76 @@ def validate_sql_query(query):
     Validates SQL query to ensure it's safe and only contains SELECT statements.
     Returns (is_valid, error_message).
     """
-    
-    
     # Normalize query - remove comments and extra whitespace
-    normalized_query = re.sub(r'--.*', '', query)  # Remove line comments
-    normalized_query = re.sub(r'/\*.*?\*/', '', normalized_query, flags=re.DOTALL)  # Remove block comments
-    normalized_query = ' '.join(normalized_query.split()).upper()  # Normalize whitespace and convert to uppercase
+    normalized_query = re.sub(r'--.*?(\n|$)', ' ', query)  # Remove line comments
+    normalized_query = re.sub(r'/\*.*?\*/', ' ', normalized_query, flags=re.DOTALL)  # Remove block comments
+    normalized_query = ' '.join(normalized_query.split())  # Normalize whitespace
     
-    # List of dangerous SQL keywords that should be blocked
+    # First check if this is a CTE (WITH clause) - if so, it's still a SELECT operation
+    if re.match(r'\s*WITH\s+.*?\s+AS\s*\(', normalized_query, re.IGNORECASE):
+        # This is a CTE - need to check if it ultimately performs a SELECT
+        # Extract the final query part after the last CTE
+        cte_parts = re.split(r'\)\s*,?\s*(?:SELECT|WITH)\b', normalized_query, flags=re.IGNORECASE)
+        if len(cte_parts) > 1:
+            # Check if the final part starts with SELECT
+            final_query_part = "SELECT" + cte_parts[-1]
+            if not re.search(r'^\s*SELECT\b', final_query_part, re.IGNORECASE):
+                return False, "CTEs must end with a SELECT statement"
+        else:
+            # If we can't parse the CTE structure correctly, look for final SELECT
+            if not re.search(r'\)\s*SELECT\b', normalized_query, re.IGNORECASE):
+                return False, "CTEs must end with a SELECT statement"
+    # If not a CTE, verify it's a regular SELECT
+    elif not re.match(r'\s*SELECT\b', normalized_query, re.IGNORECASE):
+        return False, "Only SELECT statements are allowed"
+    
+    # List of dangerous SQL keywords that should be blocked - outside of CTEs and subqueries
     dangerous_keywords = [
         'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'TRUNCATE',
-        'MERGE', 'REPLACE', 'EXEC', 'EXECUTE', 'CALL', 'DECLARE', 
+        'MERGE', 'REPLACE', 'EXEC', 'EXECUTE', 'CALL',
         'GRANT', 'REVOKE', 'COMMIT', 'ROLLBACK', 'SAVEPOINT',
         'BACKUP', 'RESTORE', 'SHUTDOWN',
         'OPENROWSET', 'OPENDATASOURCE'
     ]
     
-    # Removed 'SET', 'USE', 'BEGIN', 'TRANSACTION', 'LOCK', 'UNLOCK', 'SHOW', 'DESCRIBE', 'EXPLAIN', 'LOAD', 'OUTFILE', 'INFILE', 'IMPORT', 'EXPORT', 'BULK'
-    # as these may appear in legitimate complex queries
-    
-    # Check for dangerous standalone keywords (with word boundaries)
+    # More nuanced check for dangerous keywords - check they aren't used as operations
+    # rather than just appearing in column/table names
     for keyword in dangerous_keywords:
-        # Look for the keyword as a distinct word (with word boundaries)
-        if re.search(r'\b' + keyword + r'\b', normalized_query):
-            # Special case for 'SET' which might appear in legitimate contexts like SET ROWCOUNT
-            if keyword == 'SET' and (re.search(r'\bSET\s+NOCOUNT\b', normalized_query) or 
-                                     re.search(r'\bSET\s+ROWCOUNT\b', normalized_query)):
-                continue
+        # Pattern looks for the keyword followed by whitespace, parenthesis, or semicolon
+        # to identify it as a command rather than just part of an identifier
+        if re.search(r'\b' + keyword + r'\b\s*[\s\(;]', normalized_query, re.IGNORECASE):
             return False, f"Dangerous SQL keyword detected: {keyword}"
     
-    # Ensure query starts with SELECT
-    if not normalized_query.strip().startswith('SELECT'):
-        return False, "Only SELECT statements are allowed"
-    
-    # Check for suspicious patterns - but be smarter about it
+    # Check for suspicious patterns that indicate injection attempts
     suspicious_patterns = [
         r';\s*(INSERT|UPDATE|DELETE|DROP|CREATE|ALTER)',  # Multiple statements with dangerous operations
         r'UNION.*?(INSERT|UPDATE|DELETE|DROP|CREATE|ALTER)',  # Union injection with dangerous operations
         r'--.*;',  # Comment followed by semicolon (potential comment-based SQL injection)
         r'/\*.*?;.*?\*/',  # Block comment containing semicolon
-        r'\bXP_\w+',  # Extended stored procedures (potential for privilege escalation)
-        r'\bSP_\w+EXEC',  # Stored procedures that might execute dynamic SQL
+        r'\bXP_\w+\s*\(',  # Extended stored procedures (potential for privilege escalation)
+        r'\bSP_\w+\s*\(',  # System stored procedures that might execute dynamic SQL
         r'WAITFOR\s+DELAY',  # Time-based SQL injection technique
-        r'CONVERT\s*\(\s*INT\s*,',  # Common in blind SQL injection attempts
-        r'@@VERSION',  # Server fingerprinting 
-        r'SELECT.*?INTO\s+(?!@)' # Writing to files, but allow INTO for variables
     ]
-    
-    # Remove overly aggressive patterns:
-    # r"'.*?'.*?;" - Was incorrectly flagging legitimate quotes in WHERE clauses
-    # r'OR\s+1\s*=\s*1' - Too aggressive, can appear in legitimate conditions
-    # r'AND\s+1\s*=\s*1' - Too aggressive, can appear in legitimate conditions
     
     for pattern in suspicious_patterns:
         if re.search(pattern, normalized_query, re.IGNORECASE):
-            return False, f"Suspicious SQL pattern detected: {pattern}"
+            return False, f"Suspicious SQL pattern detected"
     
     # Additional checks for known SQL injection patterns
-    # Check for common SQL injection patterns in a smarter way
     injection_patterns = [
         r"(\bOR|\bAND)\s+['\"]\s*['\"]\s*=",  # OR/AND with empty string comparison
         r"(\bOR|\bAND)\s+\d+\s*=\s*\d+\s+--", # OR/AND with always true condition and comment
-        r"(\bOR|\bAND)\s+\w+\s*=\s*\w+\s+--", # OR/AND with condition and comment
-        r"(\bOR|\bAND)\s+\d+\s*=\s*\d+\s+/\*", # OR/AND with always true condition and comment block
         r"'\s*;\s*--",  # Single quote followed by semicolon and comment
         r"'\s*;\s*/\*",  # Single quote followed by semicolon and comment block
     ]
     
     for pattern in injection_patterns:
         if re.search(pattern, normalized_query, re.IGNORECASE):
-            return False, f"SQL injection pattern detected: {pattern}"
+            return False, f"SQL injection pattern detected"
     
     # If a query passes all these checks, it's likely safe
     return True, "Query is valid"
+
 
 def execute_multiple_sql_code(sql_code, connection=None):
     """
@@ -147,7 +144,7 @@ def execute_multiple_sql_code(sql_code, connection=None):
         
         try:
             print(f"Running Query #{query_idx+1} ______________________")
-            print(f"Executing query: {query[:100]}{'...' if len(query) > 100 else ''}")
+            print(f"Executing query: {query[:400]}{'...' if len(query) > 100 else ''}")
             print("\n")
             
             # Execute query using pandas read_sql_query

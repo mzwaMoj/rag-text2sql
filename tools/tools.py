@@ -6,19 +6,23 @@ tool_sql_analysis = {
     "function": {
         "name": "agent_sql_analysis",
         "description": (
-            "Generates executable Microsoft SQL Server (MSSQL) queries based on user requests for database operations. "
-            "The 'user_request' parameter can be any data type (string, list, dictionary, tuple, JSON object, etc.), "
+            "multi-intent sql analysis. Generates executable Microsoft SQL Server (MSSQL) queries based on user requests for database operations. "
+            "The 'user_requests' parameter can be any data type (string, list, dictionary, tuple, JSON object, etc.), "
             "including natural language, structured instructions, or outputs from other agents. "
-            "The function should interpret the intent and generate an appropriate SQL query."
+            "The function can handle complex queries involving multiple tables, aggregations, and conditions."
+            "The function should interpret the intent or intents and generate an appropriate SQL query."
+            
         ),
         "parameters": {
             "type": "object",
             "properties": {
-                "user_request": {
+                "user_requests": {
                     "type": "string", 
                     "description": (
-                        "The user's request, which can be any data type (string, list, dictionary, tuple, JSON object, etc.), "
+                        "The user's request/s, which can be any data type (string, list, dictionary, tuple, JSON object, etc.), "
                         "including natural language, structured input, or the output from the router agent about what database operation to perform."
+                        "user request can be multiple intents or single intents."
+                        "Multi-intent Example: 1. Which customer has the lowest and highest account balance? 2. which quarter has the highest amount and the lowest amount?"
                     )
                 },
                 "identifier": {
@@ -26,7 +30,7 @@ tool_sql_analysis = {
                     "description": "Optional: The customer ID or account number if specified in the request"
                 }
             },
-            "required": ["user_request"]
+            "required": ["user_requests"]
         }
     }
 }
