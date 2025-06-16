@@ -9,6 +9,10 @@ yarn-error.log*
 .env.*
 .env/
 
+# virtual environments
+venv/
+.venv/
+
 # OS generated files
 .DS_Store
 Thumbs.db

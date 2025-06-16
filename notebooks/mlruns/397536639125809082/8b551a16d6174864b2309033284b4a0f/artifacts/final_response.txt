@@ -1,3 +1,0 @@
-It appears you are asking about transaction types and which had the highest amount. However, based on the available database information, I do not see a table or field related to individual transaction records or transaction types in the primary table [dbo].[customer_information]. The data mainly includes customer profiles, account balances, product holdings, and financial details, but not transaction breakdowns.
-
-If you meant something specific within the current data set (such as product holding types with the highest balances), please clarify your request, and I’ll be happy to assist! Otherwise, if there’s a transactions table available, let me know and I can help analyze it.

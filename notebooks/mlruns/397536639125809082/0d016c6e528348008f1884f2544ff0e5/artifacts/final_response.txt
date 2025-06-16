@@ -1,1 +1,0 @@
-The client with the highest account balance is Charles Cline, holding account number 5423480814 with a balance of $49,859.96.

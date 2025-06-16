@@ -1,7 +1,0 @@
-[
-  {
-    "query": "SELECT TOP 1\n    YEAR(transaction_date) AS transaction_year,\n    MONTH(transaction_date) AS transaction_month,\n    SUM(amount) AS total_amount\nFROM [dbo].[transaction_history] WITH (NOLOCK)\nWHERE status = 'Completed'\nGROUP BY YEAR(transaction_date), MONTH(transaction_date)\nORDER BY total_amount DESC;",
-    "result": "Query validation failed: Suspicious SQL pattern detected: '.*?'.*?;",
-    "status": "validation_error"
-  }
-]

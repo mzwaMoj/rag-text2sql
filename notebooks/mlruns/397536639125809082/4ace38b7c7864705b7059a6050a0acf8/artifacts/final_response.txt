@@ -1,3 +1,0 @@
-It looks like the database query encountered an error and did not run successfully. The error message says there was a “validation_error” due to a suspicious or unsupported SQL pattern detected. This means no results were returned and the information you requested could not be retrieved at this time.
-
-If you’d like, you can rephrase your request or specify what you want to analyze, and I’ll be happy to try again!

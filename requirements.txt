@@ -11,6 +11,7 @@ uvicorn
 mlflow
 pymssql
 pyodbc
+faker
 
 # azure-identity 
 # azure-keyvault-secrets 
@@ -18,3 +19,6 @@ pyodbc
 # azure-search-documents
 # pip install azure-ai-projects azure-identity
 # ! pip install azure-monitor-opentelemetry opentelemetry-sdk
+
+# Register the virtual environment as a Jupyter kernel:
+# python -m ipykernel install --user --name=.venv --display-name="Python (.venv)"
