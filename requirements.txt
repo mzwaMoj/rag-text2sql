@@ -1,4 +1,4 @@
-pandas
+
 numpy
 streamlit
 openai
@@ -12,6 +12,7 @@ mlflow
 pymssql
 pyodbc
 faker
+pandas
 
 # azure-identity 
 # azure-keyvault-secrets 
