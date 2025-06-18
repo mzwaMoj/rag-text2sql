@@ -13,6 +13,8 @@ pymssql
 pyodbc
 faker
 pandas
+openpyxl
+xlrd
 
 # azure-identity 
 # azure-keyvault-secrets 
