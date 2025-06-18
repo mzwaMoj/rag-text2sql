@@ -2,6 +2,8 @@ import pyodbc
 import os
 import platform
 import dotenv
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 def connect_to_sql_server(server=None, database=None, auth_type='sql', username=None, password=None):
     """

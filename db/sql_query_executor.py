@@ -180,7 +180,7 @@ def execute_multiple_sql_code(sql_code, connection=None):
     
     return results
 
-def execute_sql_with_pyodbc(sql_code, server=None, database=None, auth_type='sql', username=None, password=None):
+def execute_sql_with_pyodbc(sql_code, server=None, database=None, auth_type=None, username=None, password=None):
     """
     Execute SQL queries using pyodbc with the connect_to_sql_server function.
     

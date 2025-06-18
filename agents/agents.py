@@ -18,15 +18,19 @@ sys.path.append(src_dir)
 
 # Update import statement to use the new OpenAI API format
 from openai import AzureOpenAI
-
-# Import prompts
 from prompts.prompt_agent_router import prompt_agent_router
 from prompts.prompt_agent_sql_analysis import prompt_agent_sql_analysis
-
+from prompts.prompt_agent_final_response import prompt_agent_final_response
 from tools.tools import tools_definitions
-
-# Suppress warnings
 warnings.filterwarnings("ignore")
+import ssl
+import urllib3
+import httpx
+
+# Disable SSL certificate verification globally (for development only!)
+ssl._create_default_https_context = ssl._create_unverified_context
+# For requests and urllib3, suppress warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Try to load environment variables, but don't crash if module is missing
 try:
@@ -42,14 +46,26 @@ API_VERSION = os.environ.get("AZURE_OPENAI_VERSION")
 MODEL = os.environ.get("AZURE_OPENAI_DEPLOYMENT_NAME")
 MODEL_REASONING = "o3-mini" # Model for reasoning tasks
 
-# Create client
+# On windows
+# Create httpx client with SSL verification disabled
+http_client = httpx.Client(verify=False)
+
+# Create client with custom http_client
 client = AzureOpenAI(
-  default_headers={"Ocp-Apim-Subscription-Key": API_KEY},
-  api_key=API_KEY,
-  azure_endpoint=API_ENDPOINT,
-  azure_deployment= AZURE_DEPLOYMENT,
-  api_version=API_VERSION, 
+    api_key=API_KEY,
+    azure_endpoint=API_ENDPOINT,
+    api_version=API_VERSION,
+    http_client=http_client
 )
+
+# Create client
+# client = AzureOpenAI(
+#   default_headers={"Ocp-Apim-Subscription-Key": API_KEY},
+#   api_key=API_KEY,
+#   azure_endpoint=API_ENDPOINT,
+#   azure_deployment= AZURE_DEPLOYMENT,
+#   api_version=API_VERSION, 
+# )
 
 # def create_chat_completion(model, messages, tools=None, tool_choice=None):
 #     """
@@ -164,6 +180,23 @@ def routing_agent(user_request, chat_history):
         messages=messages,
         tools=tools_definitions(),
         tool_choice="auto"
+    )
+    return response
+
+def agent_final_response(user_request, chat_history):
+    """Routes the user request to the appropriate function/tool, using chat history for context."""
+    prompt = prompt_agent_final_response()
+
+    messages = [{"role": "system", "content": prompt}]
+    messages.extend(chat_history)
+
+    # Ensure latest user message is not duplicated
+    if not chat_history or chat_history[-1]["role"] != "user" or chat_history[-1]["content"] != user_request:
+        messages.append({"role": "user", "content": user_request})
+
+    response = client.chat.completions.create(
+        model=MODEL,
+        messages=messages,
     )
     return response
 

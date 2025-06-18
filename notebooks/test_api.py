@@ -21,7 +21,7 @@ API_VERSION = os.environ.get("AZURE_OPENAI_VERSION")
 MODEL = os.environ.get("AZURE_OPENAI_MODEL")
 
 # Create httpx client with SSL verification disabled
-http_client = httpx.Client(verify=False)
+http_client = httpx.Client(verify=True)
 
 # Create client with custom http_client
 client = AzureOpenAI(
